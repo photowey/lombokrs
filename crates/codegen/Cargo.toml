@@ -1,0 +1,30 @@
+[package]
+name = "lombokrs_codegen"
+version = "0.1.0"
+edition = "2021"
+
+authors = ["photowey <photowey@gmail.com>"]
+license = "Apache-2.0"
+
+documentation = "https://docs.rs/lombokrs_codegen"
+repository = "https://github.com/photowey/lombokrs_codegen"
+homepage = "https://github.com/photowey/lombokrs_codegen"
+
+description = """
+The codegen submodule for lombokes project.
+"""
+
+readme = "README.md"
+keywords = ["Lombok", "macro", "codegen"]
+# https://crates.io/category_slugs
+categories = ["development-tools::procedural-macro-helpers"]
+
+[dependencies]
+# ------------------------------------------------
+syn = { workspace = true }
+quote = { workspace = true }
+proc-macro2 = { workspace = true }
+# ------------------------------------------------
+
+[lib]
+proc-macro = true

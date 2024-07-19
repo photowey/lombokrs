@@ -1,0 +1,20 @@
+[package]
+name = "hello_lombok"
+version = "0.1.0"
+edition = "2021"
+
+publish = false
+
+authors = ["photowey <photowey@gmail.com>"]
+license = "Apache-2.0"
+
+documentation = "https://docs.rs/lombokrs"
+repository = "https://github.com/photowey/lombokrs"
+homepage = "https://github.com/photowey/lombokrs"
+
+description = """
+A simple test project of lombokrs project.
+"""
+
+[dependencies]
+lombokrs = { version = "0.1", path = "../../crates/lombok" }

@@ -1,0 +1,23 @@
+[package]
+name = "lombokrs"
+version = "0.1.0"
+edition = "2021"
+
+authors = ["photowey <photowey@gmail.com>"]
+license = "Apache-2.0"
+
+documentation = "https://docs.rs/lombokrs"
+repository = "https://github.com/photowey/lombokrs"
+homepage = "https://github.com/photowey/lombokrs"
+
+description = """
+lombokrs is a lightweight Rust macro library. It is the simple implementation of lombok Java in Rust.
+"""
+
+readme = "README.md"
+keywords = ["Lombok", "macro"]
+# https://crates.io/category_slugs
+categories = ["development-tools::procedural-macro-helpers"]
+
+[dependencies]
+lombokrs_codegen = { version = "0.1", path = "../codegen" }
