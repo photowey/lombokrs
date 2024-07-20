@@ -18,7 +18,7 @@
 
 // ----------------------------------------------------------------
 
-use lombokrs::{Builder, Getter, Setter};
+use lombokrs::{Builder, Data, Getter, Setter};
 
 #[cfg(test)]
 mod tests;
@@ -41,6 +41,15 @@ pub struct LifetimeUser<'a> {
     name: &'a str,
     email: &'a str,
     hobby: Box<&'a str>,
+}
+
+#[derive(Data, Debug)]
+pub struct DataUser {
+    id: u32,
+    age: u8,
+    name: String,
+    email: String,
+    hobby: Vec<String>,
 }
 
 // ----------------------------------------------------------------

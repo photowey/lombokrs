@@ -35,17 +35,214 @@ mod syntax;
 
 // ----------------------------------------------------------------
 
+/// `Setter` is a macro that helps you automatically generate setter methods for structs.
+///
+/// - set_x()
+///   - set_id()
+///   - ...
+///
+/// # Examples
+///
+/// ```rust
+/// use lombokrs_codegen::{Getter, Setter};
+/// // use lombokrs::*;
+///
+/// #[derive(Setter, Getter, Debug)]
+/// pub struct User {
+///     id: u32,
+///     age: u8,
+///     name: String,
+///     email: String,
+///     hobby: Vec<String>,
+/// }
+///
+/// // with lifetime
+/// #[derive(Setter, Getter, Debug)]
+/// pub struct LifetimeUser<'a> {
+///     id: u32,
+///     age: u8,
+///     name: &'a str,
+///     email: &'a str,
+///     hobby: Box<&'a str>,
+/// }
+///
+/// // ----------------------------------------------------------------
+///
+/// impl User {
+///     pub fn new(id: u32, age: u8, name: String, email: String, hobby: Vec<String>) -> Self {
+///         Self {
+///             id,
+///             age,
+///             name,
+///             email,
+///             hobby,
+///         }
+///     }
+/// }
+///
+/// // ----------------------------------------------------------------
+///
+/// // Usage:
+///
+///     let mut user = User::new(
+///         10086,
+///         18,
+///         "photowey".to_string(),
+///         "photowey@gmail.com".to_string(),
+///         vec!["badminton".to_string()],
+///     );
+///
+///     user.set_id(9527);
+///     user.set_age(25);
+///     user.set_name("lombokrs".to_string());
+///     user.set_email("lombokrs@gmail.com".to_string());
+///     user.set_hobby(vec!["football".to_string()]);
+///
+///     assert_eq!(&9527u32, user.get_id());
+///     assert_eq!(&25u8, user.get_age());
+///
+///     assert_eq!("lombokrs", user.get_name());
+///     assert_eq!("lombokrs@gmail.com", user.get_email());
+///     assert_eq!(&vec!["football".to_string()], user.get_hobby());
+///
+/// ```
 #[proc_macro_derive(Setter)]
 pub fn setter_derive(input: TokenStream) -> TokenStream {
     derive_setter(input)
 }
 
+/// `Getter` is a macro that helps you automatically generate getter methods for structs.
+///
+/// - get_x()
+///   - get_id()
+///   - ...
+/// - x()
+///   - id()
+///   - ...
+///
+/// # Examples
+///
+/// ```rust
+/// use lombokrs_codegen::{Getter, Setter};
+/// // use lombokrs::*;
+///
+/// #[derive(Setter, Getter, Debug)]
+/// pub struct User {
+///     id: u32,
+///     age: u8,
+///     name: String,
+///     email: String,
+///     hobby: Vec<String>,
+/// }
+///
+/// // with lifetime
+/// #[derive(Setter, Getter, Debug)]
+/// pub struct LifetimeUser<'a> {
+///     id: u32,
+///     age: u8,
+///     name: &'a str,
+///     email: &'a str,
+///     hobby: Box<&'a str>,
+/// }
+///
+/// // ----------------------------------------------------------------
+///
+/// impl User {
+///     pub fn new(id: u32, age: u8, name: String, email: String, hobby: Vec<String>) -> Self {
+///         Self {
+///             id,
+///             age,
+///             name,
+///             email,
+///             hobby,
+///         }
+///     }
+/// }
+///
+/// // ----------------------------------------------------------------
+///
+/// // Usage:
+///
+///    let user = User::new(
+///         10086,
+///         18,
+///         "photowey".to_string(),
+///         "photowey@gmail.com".to_string(),
+///         vec!["badminton".to_string()],
+///     );
+///
+///     assert_eq!(&10086u32, user.get_id());
+///     assert_eq!(&18u8, user.get_age());
+///
+///     assert_eq!("photowey", user.get_name());
+///     assert_eq!("photowey@gmail.com", user.get_email());
+///     assert_eq!(&vec!["badminton".to_string()], user.get_hobby());
+/// ```
 #[proc_macro_derive(Getter)]
 pub fn getter_derive(input: TokenStream) -> TokenStream {
     derive_getter(input)
 }
 
+/// `Getter` is a macro that helps you automatically generate `XxxBuilder` struct and chain methods for structs.
+///
+/// # Examples
+///
+/// ```rust
+/// use lombokrs_codegen::{Builder, Getter, Setter};
+/// // use lombokrs::*;
+///
+/// #[derive(Setter, Getter, Builder, Debug)]
+/// pub struct User {
+///     id: u32,
+///     age: u8,
+///     name: String,
+///     email: String,
+///     hobby: Vec<String>,
+/// }
+///
+/// // with lifetime
+/// #[derive(Setter, Getter, Builder, Debug)]
+/// pub struct LifetimeUser<'a> {
+///     id: u32,
+///     age: u8,
+///     name: &'a str,
+///     email: &'a str,
+///     hobby: Box<&'a str>,
+/// }
+///
+/// // ----------------------------------------------------------------
+///
+/// // Usage:
+///
+///    let user = User::builder()
+///         .id(10086)
+///         .age(18)
+///         .name("photowey".to_string())
+///         .email("photowey@gmail.com".to_string())
+///         .hobby(vec!["badminton".to_string()])
+///         .build();
+///
+///     assert_eq!(&10086u32, user.get_id());
+///     assert_eq!(&18u8, user.get_age());
+///
+///     assert_eq!("photowey", user.get_name());
+///     assert_eq!("photowey@gmail.com", user.get_email());
+///     assert_eq!(&vec!["badminton".to_string()], user.get_hobby());
+/// ```
 #[proc_macro_derive(Builder)]
 pub fn builder_derive(input: TokenStream) -> TokenStream {
     derive_builder(input)
+}
+
+/// `Data` is a composite macro that includes [`Setter`], [`Getter`], and [`Builder`].
+#[proc_macro_derive(Data)]
+pub fn data_derive(input: TokenStream) -> TokenStream {
+    TokenStream::from_iter(
+        vec![
+            derive_setter(input.clone()),
+            derive_getter(input.clone()),
+            derive_builder(input.clone()),
+        ]
+        .into_iter(),
+    )
 }
