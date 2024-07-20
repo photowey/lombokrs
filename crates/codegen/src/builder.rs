@@ -24,7 +24,11 @@ use quote::{format_ident, quote};
 
 use crate::syntax::parser::{try_derive_input, try_named_fields};
 
+// ----------------------------------------------------------------
+
 const BUILDER_SUFFIX: &str = "Builder";
+
+// ----------------------------------------------------------------
 
 pub fn derive_builder(input: TokenStream) -> TokenStream {
     let derive_input = try_derive_input(input);

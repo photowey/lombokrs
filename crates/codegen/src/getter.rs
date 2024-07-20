@@ -25,7 +25,11 @@ use syn::Type;
 
 use crate::syntax::parser::{try_derive_input, try_named_fields};
 
+// ----------------------------------------------------------------
+
 const GETTER_PREFIX: &str = "get_";
+
+// ----------------------------------------------------------------
 
 pub(crate) fn derive_getter(input: TokenStream) -> TokenStream {
     let derive_input = try_derive_input(input);

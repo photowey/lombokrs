@@ -18,7 +18,7 @@
 
 // ----------------------------------------------------------------
 
-use crate::User;
+use crate::{DataUser, User};
 
 #[test]
 fn test_setter() {
@@ -69,6 +69,13 @@ fn test_getter() {
     assert_eq!("photowey", user.get_name());
     assert_eq!("photowey@gmail.com", user.get_email());
     assert_eq!(&vec!["badminton".to_string()], user.get_hobby());
+
+    assert_eq!(&10086u32, user.id());
+    assert_eq!(&18u8, user.age());
+
+    assert_eq!("photowey", user.name());
+    assert_eq!("photowey@gmail.com", user.email());
+    assert_eq!(&vec!["badminton".to_string()], user.hobby());
 }
 
 #[test]
@@ -87,6 +94,43 @@ fn test_builder() {
     assert_eq!("photowey", user.get_name());
     assert_eq!("photowey@gmail.com", user.get_email());
     assert_eq!(&vec!["badminton".to_string()], user.get_hobby());
+}
+
+#[test]
+fn test_data() {
+    let mut user = DataUser::builder()
+        .id(10086)
+        .age(18)
+        .name("photowey".to_string())
+        .email("photowey@gmail.com".to_string())
+        .hobby(vec!["badminton".to_string()])
+        .build();
+
+    // ----------------------------------------------------------------
+
+    user.set_id(9527);
+    user.set_age(25);
+    user.set_name("lombokrs".to_string());
+    user.set_email("lombokrs@gmail.com".to_string());
+    user.set_hobby(vec!["football".to_string()]);
+
+    // ----------------------------------------------------------------
+
+    assert_eq!(&9527u32, user.get_id());
+    assert_eq!(&25u8, user.get_age());
+
+    assert_eq!("lombokrs", user.get_name());
+    assert_eq!("lombokrs@gmail.com", user.get_email());
+    assert_eq!(&vec!["football".to_string()], user.get_hobby());
+
+    // ----------------------------------------------------------------
+
+    assert_eq!(&9527u32, user.id());
+    assert_eq!(&25u8, user.age());
+
+    assert_eq!("lombokrs", user.name());
+    assert_eq!("lombokrs@gmail.com", user.email());
+    assert_eq!(&vec!["football".to_string()], user.hobby());
 }
 
 #[test]

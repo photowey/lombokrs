@@ -24,7 +24,11 @@ use quote::{format_ident, quote};
 
 use crate::syntax::parser::{try_derive_input, try_named_fields};
 
+// ----------------------------------------------------------------
+
 const SETTER_PREFIX: &str = "set_";
+
+// ----------------------------------------------------------------
 
 pub(crate) fn derive_setter(input: TokenStream) -> TokenStream {
     let derive_input = try_derive_input(input);
