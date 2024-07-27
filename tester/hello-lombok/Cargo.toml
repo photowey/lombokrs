@@ -17,4 +17,4 @@ A simple test project of lombokrs project.
 """
 
 [dependencies]
-lombokrs = { version = "0.1", path = "../../crates/lombok" }
+lombokrs = { version = "0.2", path = "../../crates/lombok" }

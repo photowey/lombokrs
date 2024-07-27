@@ -31,7 +31,6 @@ use crate::setter::derive_setter;
 mod builder;
 mod getter;
 mod setter;
-mod syntax;
 
 // ----------------------------------------------------------------
 
@@ -198,6 +197,9 @@ pub fn getter_derive(input: TokenStream) -> TokenStream {
 ///     name: String,
 ///     email: String,
 ///     hobby: Vec<String>,
+///     // @since 0.2.0
+///     #[builder(method = "activity")]
+///     activities: Vec<String>,
 /// }
 ///
 /// // with lifetime
@@ -220,7 +222,12 @@ pub fn getter_derive(input: TokenStream) -> TokenStream {
 ///         .name("photowey".to_string())
 ///         .email("photowey@gmail.com".to_string())
 ///         .hobby(vec!["badminton".to_string()])
-///         .build();
+///         // @since 0.2.0
+///         .activities(vec!["badminton".to_string()])
+///         // #[builder] function
+///         .activity("badminton".to_string())
+///         .build()
+///         .unwrap();
 ///
 ///     assert_eq!(&10086u32, user.get_id());
 ///     assert_eq!(&18u8, user.get_age());
@@ -228,8 +235,25 @@ pub fn getter_derive(input: TokenStream) -> TokenStream {
 ///     assert_eq!("photowey", user.get_name());
 ///     assert_eq!("photowey@gmail.com", user.get_email());
 ///     assert_eq!(&vec!["badminton".to_string()], user.get_hobby());
+///
+/// // ----------------------------------------------------------------
+///
+///     let rvt = User::builder()
+///         //.id(10086)
+///         .age(18)
+///         .name("photowey".to_string())
+///         .email("photowey@gmail.com".to_string())
+///         .hobby(vec!["badminton".to_string()])
+///         // @since 0.2.0
+///         .activities(vec!["badminton".to_string()])
+///         // #[builder] function
+///         .activity("badminton".to_string())
+///         .build();
+///
+///     // Missing field: `id`!
+///     assert!(rvt.is_err())
 /// ```
-#[proc_macro_derive(Builder)]
+#[proc_macro_derive(Builder, attributes(builder))]
 pub fn builder_derive(input: TokenStream) -> TokenStream {
     derive_builder(input)
 }

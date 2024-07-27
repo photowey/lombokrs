@@ -1,6 +1,6 @@
 [package]
 name = "lombokrs"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
 
 authors = ["photowey <photowey@gmail.com>"]
@@ -20,4 +20,4 @@ keywords = ["Lombok", "macro"]
 categories = ["development-tools::procedural-macro-helpers"]
 
 [dependencies]
-lombokrs_codegen = { version = "0.1", path = "../codegen" }
+lombokrs_codegen = { version = "0.2", path = "../codegen" }

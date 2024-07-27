@@ -28,6 +28,7 @@ fn test_setter() {
         "photowey".to_string(),
         "photowey@gmail.com".to_string(),
         vec!["badminton".to_string()],
+        vec!["badminton".to_string()],
     );
 
     assert_eq!(&10086u32, user.get_id());
@@ -61,6 +62,7 @@ fn test_getter() {
         "photowey".to_string(),
         "photowey@gmail.com".to_string(),
         vec!["badminton".to_string()],
+        vec!["badminton".to_string()],
     );
 
     assert_eq!(&10086u32, user.get_id());
@@ -86,7 +88,11 @@ fn test_builder() {
         .name("photowey".to_string())
         .email("photowey@gmail.com".to_string())
         .hobby(vec!["badminton".to_string()])
-        .build();
+        // @since 0.2.0
+        .activities(vec!["badminton".to_string()])
+        .activity("badminton".to_string())
+        .build()
+        .unwrap();
 
     assert_eq!(&10086u32, user.get_id());
     assert_eq!(&18u8, user.get_age());
@@ -104,7 +110,8 @@ fn test_data() {
         .name("photowey".to_string())
         .email("photowey@gmail.com".to_string())
         .hobby(vec!["badminton".to_string()])
-        .build();
+        .build()
+        .unwrap();
 
     // ----------------------------------------------------------------
 
@@ -135,12 +142,7 @@ fn test_data() {
 
 #[test]
 fn test_builder_default() {
-    let user = User::builder().build();
-
-    assert_eq!(&0u32, user.get_id());
-    assert_eq!(&0u8, user.get_age());
-
-    assert_eq!("", user.get_name());
-    assert_eq!("", user.get_email());
-    assert_eq!(&Vec::<String>::new(), user.get_hobby());
+    let rvt = User::builder().build();
+    // Missing field: `id`!
+    assert!(rvt.is_err());
 }

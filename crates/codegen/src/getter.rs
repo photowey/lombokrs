@@ -22,8 +22,7 @@ use proc_macro::TokenStream;
 
 use quote::{format_ident, quote, ToTokens};
 use syn::Type;
-
-use crate::syntax::parser::{try_derive_input, try_named_fields};
+use synext::{try_derive_input, try_parse_named_fields};
 
 // ----------------------------------------------------------------
 
@@ -40,7 +39,7 @@ pub(crate) fn derive_getter(input: TokenStream) -> TokenStream {
     // Getters
     let mut getters = Vec::new();
 
-    let fields = try_named_fields(&derive_input);
+    let fields = try_parse_named_fields(&derive_input);
     fields.iter().for_each(|field| {
         let field_name = field.ident.clone().unwrap();
         let field_type = &field.ty;

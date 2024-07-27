@@ -10,6 +10,9 @@ particularly in handling `Lifetimes`. While
 building upon their foundation, I have made several modifications based on my understanding, especially in the areas of
 Builder and Getter implementations.
 
+`v0.2.0` version, redesigned the functionality of macro `Builder`, mainly inspired by
+the [proc-macro-workshop](https://github.com/dtolnay/proc-macro-workshop) project.
+
 ## 2. Implementation
 
 - [x] `@Getter` - `#[derive(Getter)]`
@@ -46,7 +49,7 @@ Add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-lombokrs = "0.1"
+lombokrs = "0.2"
 ```
 
 ## 4.`APIs`

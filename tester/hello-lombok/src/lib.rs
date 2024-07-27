@@ -32,6 +32,8 @@ pub struct User {
     name: String,
     email: String,
     hobby: Vec<String>,
+    #[builder(method = "activity")]
+    activities: Vec<String>,
 }
 
 #[derive(Setter, Getter, Builder, Debug)]
@@ -55,13 +57,21 @@ pub struct DataUser {
 // ----------------------------------------------------------------
 
 impl User {
-    pub fn new(id: u32, age: u8, name: String, email: String, hobby: Vec<String>) -> Self {
+    pub fn new(
+        id: u32,
+        age: u8,
+        name: String,
+        email: String,
+        hobby: Vec<String>,
+        activities: Vec<String>,
+    ) -> Self {
         Self {
             id,
             age,
             name,
             email,
             hobby,
+            activities,
         }
     }
 }
