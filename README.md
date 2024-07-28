@@ -52,6 +52,7 @@ Add this to your `Cargo.toml`:
 lombokrs = "0.2"
 ```
 
+
 ## 4.`APIs`
 
 ### 4.0. `Prepare`
@@ -64,6 +65,9 @@ pub struct User {
     name: String,
     email: String,
     hobby: Vec<String>,
+    // @since 0.2.0
+    #[builder(method = "activity")]
+    activities: Vec<String>,
 }
 
 #[derive(Setter, Getter, Builder, Debug)]
@@ -101,11 +105,11 @@ impl<'a> LifetimeUser<'a> {
 
 ```rust
 let mut user = User::new(
-10086,
-18,
-"photowey".to_string(),
-"photowey@gmail.com".to_string(),
-vec!["badminton".to_string()],
+    10086,
+    18,
+    "photowey".to_string(),
+    "photowey@gmail.com".to_string(),
+    vec!["badminton".to_string()],
 );
 
 // ----------------------------------------------------------------
@@ -139,11 +143,11 @@ assert_eq!(&vec!["football".to_string()], user.get_hobby());
 
 ```rust
 let user = User::new(
-10086,
-18,
-"photowey".to_string(),
-"photowey@gmail.com".to_string(),
-vec!["badminton".to_string()],
+    10086,
+    18,
+    "photowey".to_string(),
+    "photowey@gmail.com".to_string(),
+    vec!["badminton".to_string()],
 );
 
 // ---------------------------------------------------------------- Getter | get_x()
@@ -172,12 +176,17 @@ assert_eq!(&vec!["badminton".to_string()], user.hobby());
 // UserBuilder = User::builder()
 
 let user = User::builder()
-.id(10086)
-.age(18)
-.name("photowey".to_string())
-.email("photowey@gmail.com".to_string())
-.hobby(vec!["badminton".to_string()])
-.build();
+    .id(10086)
+    .age(18)
+    .name("photowey".to_string())
+    .email("photowey@gmail.com".to_string())
+    .hobby(vec!["badminton".to_string()])
+    // @since 0.2.0
+    .activities(vec!["badminton".to_string()])
+	// #[builder(method = "activity")]
+    .activity("badminton".to_string())
+    .build()   // Result<T,E>
+    .unwrap(); // @since 0.2.0
 
 // ----------------------------------------------------------------
 
@@ -195,12 +204,13 @@ assert_eq!(&vec!["badminton".to_string()], user.get_hobby());
 // ---------------------------------------------------------------- Builder
 
 let mut user = DataUser::builder()
-.id(10086)
-.age(18)
-.name("photowey".to_string())
-.email("photowey@gmail.com".to_string())
-.hobby(vec!["badminton".to_string()])
-.build();
+    .id(10086)
+    .age(18)
+    .name("photowey".to_string())
+    .email("photowey@gmail.com".to_string())
+    .hobby(vec!["badminton".to_string()])
+    .build()   // Result<T,E>
+    .unwrap(); // @since 0.2.0
 
 // ---------------------------------------------------------------- Setter
 

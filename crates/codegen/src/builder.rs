@@ -21,12 +21,8 @@
 use proc_macro::TokenStream;
 
 use quote::{format_ident, quote};
-use syn::spanned::Spanned;
-use syn::{DeriveInput, Type};
-use synext::{
-    try_derive_input, try_parse_named_fields, try_predicate_is_option, try_predicate_is_vec,
-    try_unwrap_option, try_unwrap_vec,
-};
+use syn::DeriveInput;
+use synext::*;
 
 // ----------------------------------------------------------------
 
@@ -96,7 +92,11 @@ pub fn derive_builder_setters(derive_input: &DeriveInput) -> Vec<proc_macro2::To
 
             // #[builder(method = "activity")]
             // activities: Vec<String>
-            if let Ok(builder_method_opt) = try_predicate_vec_builder_custom_method(field) {
+            if let Ok(builder_method_opt) = try_extract_field_attribute_path_attribute(
+                BUILDER_ATTR_NAME,
+                BUILDER_ATTR_CUSTOM_METHOD,
+                field,
+            ) {
                 if let Some(builder_method) = builder_method_opt {
                     let inner_type = try_unwrap_vec(field_type);
 
@@ -250,55 +250,4 @@ pub fn derive_builder(input: TokenStream) -> TokenStream {
     };
 
     TokenStream::from(expanded)
-}
-
-// ----------------------------------------------------------------
-
-fn try_predicate_is_not_option_and_vec(ty: &Type) -> bool {
-    try_predicate_is_not_option(ty) && try_predicate_is_not_vec(ty)
-}
-
-fn try_predicate_is_not_option(ty: &Type) -> bool {
-    !try_predicate_is_option(ty)
-}
-
-fn try_predicate_is_not_vec(ty: &Type) -> bool {
-    !try_predicate_is_vec(ty)
-}
-
-fn try_predicate_vec_builder_custom_method(field: &syn::Field) -> syn::Result<Option<syn::Ident>> {
-    for attr in &field.attrs {
-        if let Ok(syn::Meta::List(syn::MetaList {
-            ref path,
-            ref nested,
-            ..
-        })) = attr.parse_meta()
-        {
-            if let Some(p) = path.segments.first() {
-                if p.ident == BUILDER_ATTR_NAME {
-                    if let Some(syn::NestedMeta::Meta(syn::Meta::NameValue(kv))) = nested.first() {
-                        if kv.path.is_ident(BUILDER_ATTR_CUSTOM_METHOD) {
-                            if let syn::Lit::Str(ref method) = kv.lit {
-                                return Ok(Some(syn::Ident::new(
-                                    method.value().as_str(),
-                                    attr.span(),
-                                )));
-                            }
-                        } else {
-                            if let Ok(syn::Meta::List(ref list)) = attr.parse_meta() {
-                                return Err(syn::Error::new_spanned(
-                                    list,
-                                    format!(
-                                        r#"expected `{}({} = "...")`"#,
-                                        BUILDER_ATTR_NAME, BUILDER_ATTR_CUSTOM_METHOD
-                                    ),
-                                ));
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    Ok(None)
 }
